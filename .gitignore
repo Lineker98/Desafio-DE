@@ -9,6 +9,7 @@ airflow-data
 node_modules/
 dist/
 logs/
+__pycache__/
 
 # Compiled Java class files
 *.class
