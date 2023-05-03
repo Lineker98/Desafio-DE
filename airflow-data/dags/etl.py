@@ -1,7 +1,6 @@
 import pandas as pd
 import csv
 from typing import Optional, Tuple, List
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.sqlite.hooks.sqlite import SqliteHook
 
 def extract_load(table: str, file_path: Optional[str] = None) -> None | Tuple[List, List]:

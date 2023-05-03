@@ -1,6 +1,5 @@
 from airflow.utils.edgemodifier import Label
 from datetime import datetime, timedelta
-from textwrap import dedent
 from airflow.operators.python import PythonOperator
 from airflow import DAG
 from airflow.models import Variable
