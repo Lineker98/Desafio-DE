@@ -39,7 +39,8 @@ def process(join_table: str, left_key: str, right_key: str, how: str, file_path:
 
     Args:
         join_table (str): Tabela desejada para fazer o join.
-        on (str): Coluna referência para realizar o join.
+        left_key (str): Chave para o join da tabela à esquerda.
+        right_key (str): Chave para o join da tabela à direita.
         how (str): De qual maneira o join será executado.
         file_path (str): Arquivo para savar o resultado da operação.
     """
