@@ -95,7 +95,7 @@ airflow standalone
 
 Por fim, é necessário configurar a conexão para o seu banco sqlite, para isso, podemos utilizar a interface do airflow da seguinte forma: Na aba "Admin > Concections", clique a adicionar uma nova conexão:
 
-![img](images/connection.png)
+![img](images/connection.png.png)
 
 Para realizar a conexão com a base dados sqlite, basta informar o id, o tipo e o host. Para o id, basta manter o mesmo ocmo exibido na imagem acima, caso houver alterações, é necessário informar o novo id no código. O tipo definimos com Sqlite e o host é o caminho para o arquivo que deseja trabalhar sobre.
 
