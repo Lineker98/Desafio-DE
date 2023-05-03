@@ -1,6 +1,7 @@
 from airflow.utils.edgemodifier import Label
 from datetime import datetime, timedelta
 from airflow.operators.python import PythonOperator
+from textwrap import dedent
 from airflow import DAG
 from airflow.models import Variable
 from etl import extract_load, process
@@ -63,6 +64,16 @@ with DAG(
                    'file_path': 'output_orders.csv'},
     )
 
+    get_orders.doc_md = dedent(
+    """\
+    #### Task Documentation
+
+    This task extract the data from the sqlite database and and load it into 'output_orders.csv'.
+    The function to run the task (extract_load) receive two arguments the table to be extratecd and the path
+    to save thequery result.
+    """
+    )
+
     calculate = PythonOperator(
         task_id='calculate_vendas_brasil',
         python_callable=process,
@@ -71,6 +82,16 @@ with DAG(
                    'right_key': 'OrderId',
                    'how': 'inner', 
                    'file_path': 'count.txt'}
+    )
+    calculate.doc_md = dedent(
+    """\
+    #### Task Documentation
+
+    This task loads another table and the execute a join with the Order data, get previously at 
+    the first task. To do the join, is needed to pass the table to be extract in the sqlite database, the keys
+    related to the tables and the path to  store the result. It is also importante to note the this task calls
+    the function used in the first task, but just to extract the the data.
+    """
     )
 
     get_orders >> calculate >> export_final_output
