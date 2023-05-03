@@ -75,7 +75,7 @@ with DAG(
     )
 
     calculate = PythonOperator(
-        task_id='calculate_vendas_brasil',
+        task_id='calculate_sales_brasil',
         python_callable=process,
         op_kwargs={'join_table': 'OrderDetail', 
                    'left_key': 'Id', 
