@@ -60,15 +60,16 @@ with DAG(
     get_orders = PythonOperator(
         task_id='extract_data',
         python_callable=extract_load,
-        op_kwargs={'table': 'orders', 
+        op_kwargs={'table': 'Order', 
                    'file_path': 'output_orders.csv'},
     )
 
     calculate = PythonOperator(
         task_id='calculate_vendas_brasil',
         python_callable=process,
-        op_kwargs={'join_table': 'order_details', 
-                   'on': 'order_id', 
+        op_kwargs={'join_table': 'OrderDetail', 
+                   'left_key': 'Id', 
+                   'right_key': 'OrderId',
                    'how': 'inner', 
                    'file_path': 'count.txt'}
     )

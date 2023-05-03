@@ -2,7 +2,7 @@ import pandas as pd
 import csv
 from typing import Optional, Tuple, List
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-
+from airflow.providers.sqlite.hooks.sqlite import SqliteHook
 
 def extract_load(table: str, file_path: Optional[str] = None) -> None | Tuple[List, List]:
     """
@@ -16,10 +16,10 @@ def extract_load(table: str, file_path: Optional[str] = None) -> None | Tuple[Li
         None | Tuple[List, List]: None se realizar o carregamento da tabela uma tupla de listas
         contendo as linhas extraídas e o nomes das colunas, respectivamente.
     """
-    hook = PostgresHook(postgres_conn_id='postgres-lighthouse')
+    hook = SqliteHook(sqlite_conn_id='sqlite_connection')
     conn = hook.get_conn()
     cursor = conn.cursor()
-    select_query = f"SELECT * FROM {table}"
+    select_query = f"SELECT * FROM '{table}'"
     cursor.execute(select_query)
     lines = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
@@ -33,7 +33,7 @@ def extract_load(table: str, file_path: Optional[str] = None) -> None | Tuple[Li
     else:
         return (lines, columns)
     
-def process(join_table: str, on: str, how: str, file_path: str) -> None:
+def process(join_table: str, left_key: str, right_key: str, how: str, file_path: str) -> None:
     """
     Função para calcular a quantidade vendida para o Rio de janeiro.
 
@@ -45,10 +45,10 @@ def process(join_table: str, on: str, how: str, file_path: str) -> None:
     """
     lines, columns = extract_load(table=join_table)
     df2 = pd.DataFrame(lines, columns=columns)
-    df1 = pd.read_csv("data/output_orders.csv")
+    df1 = pd.read_csv("output_orders.csv")
 
-    df_join = pd.merge(df1, df2, on=on, how=how)
-    result = df_join.loc[df_join['ship_city'] == 'Rio de Janeiro', 'quantity'].sum()
+    df_join = pd.merge(df1, df2, left_on=left_key, right_on=right_key, how=how)
+    result = df_join.loc[df_join['ShipCity'] == 'Rio de Janeiro', 'Quantity'].sum()
     
     with open(file_path, 'w') as f:
         f.write(str(result))
